@@ -34,9 +34,10 @@ def detect_headings(text: str) -> List[Dict[str, Any]]:
     patterns = [
         r'^(#{1,6})\s+(.+)$',           # Markdown: # Heading
         r'^(?:Chương|Chapter)\s+\d+',    # Chapter markers
-        r'^Slide\s+\d+',                  # Slide markers
+        r'(?i)^SLIDE\s+\d+',             # Slide markers (case-insensitive)
         r'^\*\*(.+?)\*\*',               # Bold headings
         r'^(?:\d+\.)\s+[A-Z]',           # Numbered sections starting with caps
+        r'(?i)^BLOCK\s+\d+',             # Block markers
     ]
     
     for i, line in enumerate(text.split('\n')):
@@ -49,7 +50,8 @@ def detect_headings(text: str) -> List[Dict[str, Any]]:
                 # Clean the heading text
                 heading_text = re.sub(r'^#+\s*', '', stripped)
                 heading_text = re.sub(r'\*\*', '', heading_text)
-                heading_text = re.sub(r'^Slide\s+\d+:\s*', '', heading_text)
+                heading_text = re.sub(r'(?i)^SLIDE\s+\d+\s*', '', heading_text)
+                heading_text = re.sub(r'(?i)^BLOCK\s+\d+\s*[·•]?\s*', '', heading_text)
                 
                 if len(heading_text) > 3:  # Skip very short matches
                     headings.append({
@@ -92,8 +94,23 @@ def chunk_by_headings(text: str, chunk_size: int = 1200) -> List[Dict[str, Any]]
                 "section": heading_info["heading"]
             })
         else:
-            # Split large sections by paragraphs
-            paragraphs = section_text.split('\n\n')
+            # Try splitting by paragraphs first
+            paragraphs = [p for p in section_text.split('\n\n') if p.strip()]
+            
+            # If only 1 paragraph (no \n\n breaks), split by single newlines
+            if len(paragraphs) <= 1:
+                paragraphs = [p for p in section_text.split('\n') if p.strip()]
+            
+            # If still only 1 block, force character-based split
+            if len(paragraphs) <= 1 and len(section_text) > chunk_size:
+                sub_chunks = chunk_by_characters(section_text, chunk_size, overlap=200)
+                for j, sub in enumerate(sub_chunks):
+                    chunks.append({
+                        "content": sub["content"],
+                        "section": heading_info["heading"] + (" (continued)" if j > 0 else "")
+                    })
+                continue
+            
             current_chunk = ""
             current_section = heading_info["heading"]
             
@@ -196,12 +213,34 @@ def chunk_text(
         # Fall back to character-based chunking
         chunks = chunk_by_characters(text, chunk_size, overlap)
     
+    MIN_CHUNK_SIZE = 100
+
+    # Merge tiny chunks with the next one
+    merged = []
+    carry = ""
+    carry_section = ""
+    for chunk in chunks:
+        content = chunk["content"]
+        section = chunk.get("section", "unknown")
+        if len(content) < MIN_CHUNK_SIZE:
+            carry += ("\n" if carry else "") + content
+            carry_section = carry_section or section
+        else:
+            if carry:
+                content = carry + "\n" + content
+                section = carry_section or section
+                carry = ""
+                carry_section = ""
+            merged.append({"content": content, "section": section})
+    if carry and merged:
+        merged[-1]["content"] += "\n" + carry
+
     # Generate final chunk objects with metadata
     result = []
-    for i, chunk in enumerate(chunks):
+    for i, chunk in enumerate(merged):
         chunk_id = f"{day}_chunk_{i+1:04d}"
         content = chunk["content"]
-        
+
         result.append({
             "id": chunk_id,
             "day": day,
@@ -211,5 +250,5 @@ def chunk_text(
             "content": content,
             "char_count": len(content)
         })
-    
+
     return result

@@ -1,6 +1,6 @@
 {
   "total_files": 5,
-  "total_chunks": 207,
+  "total_chunks": 188,
   "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
   "vector_db": "chroma",
   "collection_name": "ai_thuc_chien_docs"
