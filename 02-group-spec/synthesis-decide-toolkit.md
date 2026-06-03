@@ -1,85 +1,64 @@
-# Toolkit — Từ Evidence Đến Build Slice
-
-Dùng sau khi nhóm đã có evidence. Mục tiêu là chốt một build slice đủ nhỏ cho Day 06.
+# Synthesis & Decision — AI IN ACTION Copilot
 
 ## 1. Gom evidence thành cụm
 
-Gom theo **workflow/pain**, không gom theo tên feature.
+Gom theo **workflow/pain**, không gom theo tên feature:
 
-Ví dụ cụm tốt:
+- **"Không nhớ slide nào"** — học viên biết khái niệm tồn tại nhưng không định vị được trong 300+ trang slide
+- **"Hỏi lặp lại trong Discord"** — cùng câu hỏi xuất hiện ≥3 lần/buổi; TA phải trả lời thủ công
+- **"Câu trả lời không có nguồn"** — khi hỏi bạn bè hoặc Google, không chắc đáp án đúng với context khoá học này
+- **"Mất tập trung khi đang code"** — phải rời IDE để mở PDF, tìm kiếm, rồi quay lại → mất flow
 
-- "Không biết chọn chuyên khoa"
-- "Không hiểu vì sao bị tính phí"
-- "Muốn sửa output nhưng không có chỗ sửa"
-- "Bot trả lời tự tin nhưng không dẫn nguồn"
-
-## 2. Viết insight
-
-Form:
+## 2. Insight
 
 ```text
-User [segment] không chỉ cần [surface need].
-Họ thật ra cần [deeper need],
-vì [evidence pattern].
+Học viên AI Thực Chiến không chỉ cần một chatbot.
+Họ thật ra cần tra cứu đúng context khoá học, đúng lúc (trong 40 phút lab),
+vì slide nhiều và không có semantic search — tra thủ công vừa chậm vừa dễ tìm sai nguồn.
 ```
 
-Ví dụ:
+## 3. Opportunity
 
 ```text
-Người lần đầu đi khám không chỉ cần danh sách chuyên khoa.
-Họ cần hỗ trợ ra quyết định an toàn,
-vì nhiều review/observation cho thấy họ không biết triệu chứng của mình nên đi khoa nào.
+Cơ hội là dùng RAG để augment quá trình học/làm lab:
+nhận câu hỏi tự nhiên → tìm đoạn liên quan nhất trong ChromaDB → trả answer + source (Day X, section Y) + next action,
+trong khi vẫn kiểm soát failure bằng fallback rõ khi câu hỏi ngoài scope khoá học.
 ```
 
-## 3. Viết opportunity
+## 4. Kiểm tra build slice
 
-Form:
-
-```text
-Cơ hội là dùng AI để [augment/automate hành động hẹp],
-giúp user [kết quả],
-trong khi vẫn kiểm soát [failure/risk].
-```
-
-## 4. Chọn build slice
-
-Build slice tốt phải qua 5 câu hỏi:
-
-| Câu hỏi | Đạt khi |
+| Câu hỏi | Kết quả |
 |---|---|
-| User cụ thể chưa? | Nói được ai dùng, trong bối cảnh nào. |
-| Task đủ hẹp chưa? | Demo được trong 3-5 phút. |
-| AI decision rõ chưa? | AI gợi ý/tự làm một việc cụ thể. |
-| Failure path rõ chưa? | Có một case AI không chắc hoặc sai để test. |
-| Có evidence không? | Có bằng chứng từ self-use/review/user/competitor. |
+| User cụ thể chưa? | **Đạt** — học viên Batch 02 đang làm lab/hackathon, cần tra nhanh nội dung slide |
+| Task đủ hẹp chưa? | **Đạt** — một câu hỏi → RAG → answer + source, demo trong < 2 phút |
+| AI decision rõ chưa? | **Đạt** — AI chọn chunk liên quan nhất, generate answer, gắn source |
+| Failure path rõ chưa? | **Đạt** — câu hỏi ngoài scope (hỏi về tin tức, code ngoài khoá) → fallback thay vì hallucinate |
+| Có evidence không? | **Đạt** — Discord observation, self-use timing, slide volume count |
 
 ## 5. Quyết định: giữ, giảm scope, hay đổi hướng?
 
 | Tình huống | Quyết định |
 |---|---|
-| Evidence yếu, user mơ hồ | Dừng build sâu; quay lại research 20 phút. |
-| Ý tưởng quá rộng | Giữ domain, cắt xuống một flow. |
-| AI không cần thiết | Dùng rule/manual prototype; ghi rõ vì sao không dùng AI sâu. |
-| Rủi ro cao | Chọn augmentation hoặc conditional automation. |
-| Không demo được trong 1 ngày | Đưa phần lớn vào backlog, giữ một path nhỏ. |
+| Build full chatbot đa chức năng | Không — cắt xuống một flow: hỏi → RAG → answer + source + next action |
+| Thêm quiz generator | Vào backlog — không build Day 06 |
+| Thêm voice input | Vào backlog |
+| RAG trên tài liệu ngoài khoá học | Không — scope cố định là 6 ngày slide; ngoài đó fallback |
 
-## 6. Câu chốt cuối
-
-Điền câu này trước khi rời lớp:
+## 6. Câu chốt
 
 ```text
-Dựa trên [evidence],
-nhóm sẽ build [prototype slice],
-cho [user],
-để giải quyết [pain],
-bằng cách AI [augment/automate task],
-và sẽ test failure path [failure mode].
+Dựa trên evidence (Discord observation: câu hỏi lặp ≥3 lần/buổi; self-use: tra slide mất 3–5 phút),
+nhóm sẽ build RAG chatbot trả lời câu hỏi về nội dung 6 ngày khoá học AI Thực Chiến,
+cho học viên Batch 02 đang làm lab hoặc hackathon,
+để giải quyết pain "không tra được theo ngữ nghĩa dưới áp lực thời gian",
+bằng cách AI augment bằng RAG → answer + source (Day X, section Y) + next action gợi ý,
+và sẽ test failure path: câu hỏi ngoài scope → fallback rõ, không hallucinate.
 ```
 
-## 7. Backlog
+## 7. Backlog (không build trong Day 06)
 
-Những thứ **không build trong Day 06**:
-
-- 
-- 
-- 
+- Quiz generator từ nội dung slide
+- Voice input / speech-to-text
+- Lịch sử chat / session memory
+- RAG trên tài liệu ngoài khoá (Stack Overflow, docs thư viện)
+- Cá nhân hoá theo tiến độ học từng học viên
