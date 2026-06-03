@@ -1,0 +1,161 @@
+Chương 1: Bức tranh AI 2026 (Từ Machine Learning đến Agentic AI)
+Slide 3: Bức tranh AI 2026. Từ Machine Learning đến Agentic AI. 01
+.
+Slide 4: Mục tiêu bài học: Sau buổi học này, bạn sẽ: 1. Hiểu cách LLM hoạt động (Transformer, token, next-token prediction). 2. Ước tính chi phí API call dựa trên token economy. 3. Sử dụng LLM từ third-party (OpenAI, Anthropic) hoặc self-host open model. 4. Nắm vững Vibe Coding mindset và sử dụng AI đúng cách, không lệ thuộc. 5. Xây dựng chatbot đơn giản có streaming response. Yêu cầu: Python 3.10+, VS Code/Cursor, API key (OpenAI)
+.
+Slide 5: AI Taxonomy — Các tầng của trí tuệ nhân tạo:
+AI: Máy thực hiện tác vụ “thông minh”.
+ML: Học từ dữ liệu, không cần lập trình tường minh.
+DL: Neural networks nhiều tầng.
+Generative AI: Nhánh AI tiên tiến có khả năng sáng tạo ra nội dung (văn bản, ảnh, video) giống như con người.
+LLM: Foundation Model chuyên ngôn ngữ — nền tảng của GenAI và Agentic AI.
+Khóa học này tập trung vào LLM -> xây dựng Agentic AI
+.
+Slide 6: Ba nhóm AI chính:
+Discriminative AI: Chức năng: Phân loại, dự đoán. Ví dụ: Spam filter, Image classifier, Fraud detection. Input -> Label.
+Generative AI: Chức năng: Sinh nội dung mới. Ví dụ: ChatGPT, Claude, DALL-E, Midjourney, GitHub Copilot. Prompt -> Content.
+Agentic AI: Chức năng: Tự lập kế hoạch & hành động. Ví dụ: AI coding agents, Auto customer support, Research agents. Goal -> Plan -> Action.
+LLM là engine chung cho cả Generative AI lẫn Agentic AI. Hành trình khóa học: LLM Foundation -> Agent -> Multi-Agent -> Deploy -> Evaluate
+.
+Slide 7: Từ AI cổ điển đến Agentic AI: 1. Perceptron (1957) -> 2. Deep Learning bùng nổ (2012) -> 3. Transformer (2017) -> 4. ChatGPT (2022) -> 5. AI Agents (2024–26)
+.
+Slide 8: Vì sao 2024-2026 là bước ngoặt?: 78% Doanh nghiệp dùng AI; $15.7T GDP toàn cầu từ AI (2030); 3.7x ROI trung bình trên mỗi $1 đầu tư. AI không còn chỉ là “trả lời hay” nữa. Từ 2024 trở đi, doanh nghiệp quan tâm nhiều hơn đến AI biết hành động, kết nối công cụ và tạo ra ROI
+.
+Slide 9: Từ LLM đến AI Agents:
+Level 0 — Core reasoning engine: LLM suy luận dựa trên kiến thức nội tại của chính nó, không sử dụng công cụ bên ngoài.
+Level 1 — Connected Solver: LLM trở thành agent, có khả năng kết nối với công cụ bên ngoài, truy xuất dữ liệu, tìm kiếm, gọi API.
+Level 2 — Strategic Problem-Solver: LLM agent lập kế hoạch nhiều bước. Sử dụng nhiều công cụ và chuỗi suy luận để xử lý bài toán phức tạp.
+Level 3 — Collaborative AI Agents: Nhiều agent LLM chuyên biệt phối hợp làm việc với nhau để giải quyết vấn đề phức tạp
+.
+Slide 10: Tại sao cần AI Agents?:
+Prompt tĩnh chỉ giải quyết 1 câu hỏi: Prompt -> Response (1 bước); Không truy cập dữ liệu mới; Không hành động được.
+AI Agent giải quyết mục tiêu hoàn chỉnh: Goal -> Plan -> Action; Kết nối API, database, tools; Xử lý workflow nhiều bước; Tạo giá trị thực tế (ROI)
+.
+Slide 11: Thành phần của AI Agent: Goal (nhận mục tiêu thay vì prompt đơn lẻ), Reasoning (phân tích và lập kế hoạch nhiều bước), Tools (search, API, database, code), Memory (lưu trạng thái và lịch sử), Action (thực thi hành động trong hệ thống). Agent = Goal + Reasoning + Tools + Memory + Action
+.
+Slide 12: Tương lai của AI Agents: Generalist AI (xử lý mục tiêu phức tạp, dài hạn); Deep Personalization (cá nhân hóa sâu); Embodied AI (tích hợp robot, IoT); Agent-driven Economy (tự vận hành, tham gia kinh tế); Adaptive Multi-Agent Systems (tự tối ưu nhiệm vụ)
+.
+
+--------------------------------------------------------------------------------
+Chương 2: LLM — Trái tim của AI hiện đại
+Slide 13: LLM — Trái tim của AI hiện đại. Transformer, Token, và cách LLM “suy nghĩ”. 02
+.
+Slide 14: Định nghĩa Large Language Model (LLM): Mô hình ngôn ngữ lớn dựa trên kiến trúc Transformer, được huấn luyện trên lượng dữ liệu văn bản khổng lồ (hàng nghìn tỷ token). LLM có khả năng sinh văn bản, trả lời câu hỏi, viết code, và thực hiện reasoning phức tạp. Đặc điểm chính: Decoder-only Transformer architecture; Self-supervised pre-training + RLHF fine-tuning; Next-token prediction; Emergent capabilities
+.
+Slide 15: Transformer — Kiến trúc cách mạng (2017):
+Self-Attention: Mỗi token “nhìn” tất cả token khác trong context.
+Multi-Head: Nhiều “góc nhìn” song song.
+Feed-Forward: Xử lý phi tuyến từng vị trí.
+Residual connections: Gradient chảy dễ dàng.
+Hai kiến trúc chính: Encoder-Decoder (BERT, T5) để phân loại, dịch thuật; Decoder-only (GPT, Claude, Gemini) để dự đoán token tiếp và sinh văn bản
+.
+Slide 16: (Hình ảnh sơ đồ kiến trúc Encoder-Decoder vs Decoder-only)
+.
+Slide 17: Transformer — Input Embedding: Transformer xử lý dữ liệu song song. Input embedding cho mô hình biết “đây là từ gì?”, nhưng nó không biết “từ này đứng ở đâu?”. Nếu chỉ nhìn vào danh sách từ, nó sẽ đánh giá 2 câu có thứ tự từ khác nhau là một
+.
+Slide 18: Embedding chỉ mang danh tính, không mang tọa độ. Làm thế nào Transformer hiểu được thứ tự khi nó đọc toàn bộ câu cùng một lúc?
+Slide 19: Transformer — Positional Encoding: X = E + P. P tạo ra một vector vị trí độc lập, cộng trực tiếp vào E (nội dung) để dung hợp vị trí vào ngữ nghĩa
+.
+Slide 20: Self-Attention — Cơ chế cốt lõi: Cơ chế cho phép model “chú ý” đến các phần quan trọng nhất của input khi xử lý mỗi token. Ví dụ: hiểu chữ "Nó" ám chỉ con mèo chứ không phải cái bàn
+.
+Slide 21: Self-Attention — Q, K, V và Attention Score: Hệ thống “khớp lệnh”. Q (Query): Tôi đang tìm gì? K (Key): Tôi có đặc trưng gì? V (Value): Tôi cung cấp thông tin gì?
+Slide 22: Scaled Dot-Product Attention: Công thức tính điểm tương quan: Attention(Q,K,V)=softmax( 
+d 
+k
+​
+ 
+
+​
+ 
+QK 
+T
+ 
+​
+ )V
+.
+Slide 23-27: Quy trình 4 bước của Self-Attention: 1. Chấm điểm (Scoring); 2. Ổn định (Scaling - tránh Vanishing gradient); 3. Chuẩn hóa (Softmax - tạo attention map); 4. Trộn thông tin (Weighted Sum)
+.
+Slide 28-33: Ví dụ thực tế: Tính Self-attention cho chuỗi "[Tôi] [yêu] [AI]" với các bước tính toán ma trận cụ thể
+.
+Slide 34: Masked Self-Attention: Khi dạy AI sinh văn bản (Decoder-only), phải che (mask) các từ chưa được sinh ra để chống gian lận, biến nó thành cỗ máy dự đoán tương lai tuyến tính
+.
+Slide 35: Multi-Head Attention: Tách attention thành nhiều head song song (Chuyên gia Đại từ, Không gian, Cú pháp) để tạo biểu diễn giàu thông tin hơn
+.
+Slide 36: Token — Đơn vị cơ bản của LLM: Khoảng 0.75 từ tiếng Anh, 0.5 từ tiếng Việt. Lưu ý: Tiếng Việt tốn nhiều token hơn do ký tự Unicode -> chi phí API cao hơn
+.
+Slide 37: Next-Token Prediction: LLM không “hiểu” mà chỉ dự đoán token xác suất cao nhất. Tham số Temperature điều chỉnh độ sáng tạo
+.
+Slide 38: LLM được tạo ra thế nào?: 1. Pre-training (đọc Internet); 2. SFT (học theo ví dụ); 3. RLHF/DPO (căn chỉnh theo sở thích con người)
+.
+Slide 39: Giới hạn bẩm sinh: Knowledge cutoff (kiến thức bị cắt); Hallucination (ảo tưởng); Context window (bộ nhớ tạm hữu hạn)
+.
+
+--------------------------------------------------------------------------------
+Chương 3: Token Economy
+Slide 40: Token Economy. Chi phí, tốc độ và cách tính giá API. 03
+.
+Slide 41: Công thức chi phí: Input tokens + Output tokens = Cost
+.
+Slide 42: Nội dung tốn nhiều token: Tiếng Việt (Unicode), Code (ký tự đặc biệt), Text có cấu trúc (JSON)
+.
+Slide 43: API Pricing: Tính theo 1 triệu tokens; Output tokens đắt hơn Input (3-5x); Giá giảm ~10x mỗi năm
+.
+Slide 44: Prompt dài = Chi phí cao: Nguồn tăng phí gồm System prompt lặp lại, RAG context dài, Chat history dài. Kết luận: Tối ưu chi phí = tối ưu prompt + context
+.
+Slide 45: Latency vs Cost Trade-off: Nhiều tokens hơn -> vừa chậm hơn vừa đắt hơn
+.
+Slide 46: Bảng so sánh các model phổ biến (Claude, GPT, Gemini, Llama) kèm giá tham khảo tháng 3/2026
+.
+Slide 47: Framework chọn model: Ưu tiên cost/latency (Haiku, Gemini Flash) vs Ưu tiên quality/reasoning (Sonnet, Opus, GPT-4o). Bắt đầu từ model đủ tốt và đủ rẻ
+.
+Slide 48: So sánh phong cách phản hồi của Claude (cấu trúc), GPT-4o (linh hoạt), Gemini (mạnh context dài)
+.
+Slide 49: Context Window: Số token tối đa trong 1 lần gọi. 128K tokens ~ 300 trang sách. Lưu ý lỗi "Lost in the Middle"
+.
+Slide 50: Ví dụ tính chi phí thực tế: So sánh chi phí hàng tháng khi dùng Claude Sonnet 4 (135)vsClaudeHaiku4.5(36) cho cùng một kịch bản chatbot
+.
+
+--------------------------------------------------------------------------------
+Chương 4: Gọi API lần đầu
+Slide 51: Gọi API lần đầu. Từ “Hello World” đến production-ready call. 04
+.
+Slide 52: Luồng một API call: Prompt -> API Call -> Token Stream -> Response. Cần kiểm soát đồng lúc: quality, latency, cost
+.
+Slide 53: Prerequisites: Python 3.10+, VS Code/Cursor, OpenAI API key, Google Colab
+.
+Slide 54-61: Thực hành Code: Gọi API OpenAI đầu tiên; Giải phẫu cấu trúc Request/Response; Các tham số điều khiển (Temperature, Top_p, Stop_sequences); Hàm wrapper; Đọc Token Usage; Chatbot loop
+.
+Slide 62: Tự host LLM: Code mẫu sử dụng thư viện transformers để chạy model cục bộ
+.
+Slide 63: Streaming: Cách nhận và hiển thị phản hồi theo từng chunk để giảm cảm giác chờ đợi
+.
+
+--------------------------------------------------------------------------------
+Chương 5: Vibe Coding
+Slide 64: Vibe Coding. Lập trình bằng cách làm việc cùng AI. 05
+.
+Slide 65: Định nghĩa: Viết phần mềm bằng cách mô tả ý tưởng AI sẽ sinh code. Quy trình: AI sinh code -> Developer review và chỉnh sửa
+.
+Slide 66: Tại sao cần? Giảm boilerplate, tập trung vào logic thay vì cú pháp
+.
+Slide 67: Workflow: Idea -> Prompt -> Code -> Test -> Refine
+.
+Slide 68: Mindset Shift: Developer chuyển từ người viết code -> sang người thiết kế + review + điều phối AI
+.
+Slide 69: 3 nguyên tắc: 1. Intent-driven (rõ mục tiêu); 2. Context-first (đủ bối cảnh); 3. Human review (con người chốt)
+.
+Slide 70: So sánh Prompt tốt (cụ thể yêu cầu bộ nhớ, streaming, exit command) vs Prompt kém (mơ hồ)
+.
+
+--------------------------------------------------------------------------------
+Phần kết thúc
+Slide 71-72: Thực hành (Lab #1): Gọi API thực tế, so sánh GPT-4o và GPT-4o-mini trong 90 phút
+.
+Slide 73: Tổng kết (Key Takeaways): LLM là Transformer dự đoán token; Cần Pre-training/SFT; Chọn model theo trade-off; API call có 4 thành phần chính; Vibe Coding cần intent rõ + bối cảnh đủ
+.
+Slide 74: Bài tập: Đọc paper "Attention Is All You Need" và thử gọi API với 3 prompt khác nhau
+.
+Slide 75: Danh sách tài liệu tham khảo chính
+.
+Slide 76-77: Hỏi & Đáp và câu hỏi suy ngẫm cuối bài: “Bạn đang dùng AI mỗi ngày — nhưng thực sự bên trong nó làm gì?”
+.

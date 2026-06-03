@@ -1,0 +1,89 @@
+Dưới đây là toàn bộ nội dung văn bản được trích xuất chi tiết từ tài liệu của bạn, có ghi rõ thông tin này được lấy ở **Slide (trang) số bao nhiêu** bên cạnh mỗi phần:
+
+### TỔNG QUAN & MỤC TIÊU BÀI HỌC (Slide 1 - 3)
+*   **Chủ đề:** Prompt Engineering & Tool Calling - Làm sao nói để AI hiểu đúng ý?.
+*   **Mục tiêu chính:** Viết được prompt rõ ràng theo 4 thành phần (RTCF); Hiểu khi nào dùng zero-shot, few-shot, CoT; Viết system prompt production-grade; Khai báo tool schema; Nhận diện prompt injection.
+*   **Cơ chế cốt lõi:** Prompt là giao diện (interface) giữa ý định của người dùng và hành vi của model; Tool calling là giao diện giữa model và thế giới bên ngoài.
+
+---
+
+### 01. PROMPT ENGINEERING FUNDAMENTALS (Slide 4 - 10)
+*   **Nguyên tắc vàng:** "Specificity beats cleverness" (Cụ thể thắng thông minh). Prompt ngắn nhưng rõ nghĩa luôn tốt hơn prompt dài mà lan man (Slide 4).
+*   **4 Thành phần của Prompt (RTCF):**
+    *   **R**ole (Vai trò): Ảnh hưởng code style, từ vựng (Slide 5).
+    *   **T**ask (Nhiệm vụ): Càng cụ thể càng bớt mơ hồ (Slide 5).
+    *   **C**ontext (Bối cảnh): Cung cấp thông tin nền để model không đoán mò (Slide 5).
+    *   **F**ormat (Định dạng): Cấu trúc đầu ra (JSON, bullets) tránh model giải thích thừa (Slide 5).
+    *   *Lời khuyên:* Luôn bắt đầu với Task + Format. Chỉ thêm Role/Context khi thực sự cần (Slide 5). Prompt là một quá trình lặp lặp lại (Iterative process) (Slide 7).
+*   **Phân loại Prompt:** Instruction (ra lệnh 1 lần), Conversation (giữ ngữ cảnh nhiều lượt), System prompt (đặt luật, giới hạn) (Slide 7-8).
+*   **Negative Prompting:** Thay vì chỉ nói "Đừng", hãy nói rõ giải pháp thay thế. Ví dụ: Thay vì "Đừng dùng jargon", hãy bảo "Giải thích bằng ngôn ngữ lớp 10" (Slide 8).
+*   **Token & Temperature:** Prompt dài không đồng nghĩa prompt tốt. Nhiệt độ thấp (0) dùng cho phân loại, trung bình (0.3-0.5) cho chatbot, cao (0.7-1.5) để sáng tạo. Giảm nhiệt độ không cứu được một prompt mơ hồ (Slide 9-10).
+
+---
+
+### 02. ADVANCED PROMPTING TECHNIQUES (Slide 11 - 16)
+*   **Thang kỹ thuật:** Trình tự thử thực dụng là Zero-shot -> Few-shot -> CoT (Slide 11).
+    *   **Zero-shot:** Không ví dụ, nên thử đầu tiên (Slide 11).
+    *   **Few-shot (2-5 ví dụ):** Dùng khi model ra sai format. Ví dụ phải đa dạng, đúng định dạng và cover các edge cases (Slide 12-13). Tránh ví dụ quá giống nhau hoặc có lỗi (Slide 13).
+    *   **Chain-of-Thought (CoT):** Bắt model suy nghĩ từng bước, tốt cho bài toán suy luận (Slide 14-15).
+*   **Structured Output Prompting:** Để hệ thống máy tính đọc dễ dàng, bắt buộc dùng JSON mode, XML tags hoặc chỉ dẫn lấy đúng định dạng JSON (Slide 15-16).
+
+---
+
+### 03. SYSTEM PROMPT ENGINEERING (Slide 17 - 22)
+*   **Cấu trúc Production-grade:** Bao gồm Persona (vai trò), Rules (luật), Capabilities (tool/dữ liệu được dùng), Constraints (điều không được làm), Output format (Slide 17-18).
+*   **Anti-patterns (Sai lầm phổ biến):** Nhồi nhét quá dài, mâu thuẫn (vừa ngắn gọn vừa chi tiết), mơ hồ, và đặc biệt là không test các ranh giới (edge cases) (Slide 21).
+*   **Checklist kiểm thử:** Phải test Happy path (câu hỏi chuẩn), Edge case (câu mơ hồ), Out of scope (câu hỏi ngoài lề), Adversarial (tấn công prompt), và Format consistency (Slide 21).
+*   **Khác biệt API:** Claude (Anthropic) hỗ trợ XML tags `<rules>` trong system prompt, còn GPT (OpenAI) để trong mảng `messages` với `"role": "system"` (Slide 20).
+
+---
+
+### 04. CONTEXT ENGINEERING (Slide 23 - 26)
+*   **Quản lý Context Window:** Không gian chứa thông tin gồm System policy, History, Current task, Tools schema và Output buffer (Slide 23).
+*   **Lost in the Middle:** Model hay quên thông tin nằm giữa, nên phải đặt lệnh quan trọng ở Đầu hoặc Cuối (Slide 23-24).
+*   **Memory Injection & Compression:** Ưu tiên đưa vào facts thực sự cần. Tóm tắt (Summarize), bỏ phần cũ (Drop) hoặc đưa ra ngoài lưu trữ (Archive) (Slide 24-25).
+*   **RAG Context Pattern:** Khi lấy dữ liệu (search DB), hãy inject kèm citation (nguồn), giới hạn độ dài chunk 500-1000 tokens (Slide 26).
+
+---
+
+### 05. PROMPT SAFETY & EVALUATION (Slide 27 - 29)
+*   **Rủi ro:** Direct injection (User bảo "bỏ qua lệnh trên") và Indirect injection (nội dung độc hại lẫn trong tài liệu) (Slide 27).
+*   **Chiến lược phòng thủ:** Bọc dữ liệu (Delimiter), phân cấp ưu tiên (Hierarchy), Validate input/output, Cấp quyền tối thiểu (Least privilege) và Human-in-the-loop (Người dùng xác nhận) (Slide 27-28).
+*   **Guardrails Pattern:** Pre-guard (kiểm tra đầu vào) và Post-guard (kiểm tra đầu ra, giấu thông tin cá nhân PII) (Slide 29).
+
+---
+
+### 06. TOOL CALLING (Slide 29 - 34)
+*   **Luồng hoạt động (Flow):** LLM không tự chạy code. Quy trình là: Ứng dụng gửi lệnh -> LLM trả về JSON chứa tên tool và tham số -> Ứng dụng của bạn chạy tool lấy kết quả -> LLM tổng hợp để trả lời (Slide 29-30).
+*   **Cấu trúc Tool Schema:** Gồm Name (tên), Description (mô tả), Parameters (tham số đầu vào), Required fields (trường bắt buộc) (Slide 30-31).
+*   **Mô tả tool (Description) tốt:** Cần nêu rõ (1) chức năng, (2) khi nào nên dùng, (3) khi nào KHÔNG nên dùng (Slide 32-33).
+*   **Tham số tool_choice:** `auto` (model tự chọn), `required` (buộc gọi), `none` (cấm gọi) (Slide 33).
+*   **Xử lý lỗi:** Lỗi tool sẽ xảy ra (Timeout, Tool not found, Error response). Cần hướng dẫn model tự giải thích hoặc có fallback mode (Slide 34-35).
+
+---
+
+### 07. DESIGN PRINCIPLES CHO TOOLS (Slide 35 - 39)
+*   **4 Nguyên tắc:** Single Responsibility (Làm 1 việc), Idempotency (Kết quả kiểm soát được khi chạy lại), Granularity hợp lý, Test độc lập (Slide 35-36).
+*   **Độ lớn (Granularity):** Quá nhỏ (gây quá nhiều call overhead), quá to (model không hiểu ranh giới). Hãy thiết kế quanh một thao tác nghiệp vụ rõ ràng như tra cứu đơn hàng (Slide 36-37).
+*   **Return Format:** Tool nên trả về JSON có cấu trúc (chứa status, data, source), không nên trả raw HTML/XML (Slide 38-39).
+
+---
+
+### 08. PARALLEL TOOL CALLING & PATTERNS (Slide 40 - 42)
+*   **Sequential vs Parallel:** Chạy tuần tự khi tool sau cần output tool trước. Chạy song song khi dữ liệu độc lập (thời tiết, tỷ giá) (Slide 40).
+*   **3 Patterns chính:**
+    1.  *Conditional tool use:* Tự quyết có gọi tool hay không (Slide 40-41).
+    2.  *Tool chaining:* Gọi nối tiếp (Slide 40-41).
+    3.  *Parallel fetch + merge:* Kéo nhiều nguồn song song rồi tổng hợp (Slide 40-41).
+
+---
+
+### 09. THỰC HÀNH & TỔNG KẾT (Slide 43 - 50)
+*   **Thực hành Lab 4:** Xây dựng ReAct agent với 2 tool, 1 system prompt và test 5 câu hỏi (Slide 43-44).
+*   **5 Câu hỏi kiểm tra (Test Questions):**
+    1. Gọi tool A (Thời tiết)
+    2. Gọi tool B (Doanh số)
+    3. Song song (Thời tiết + Doanh số)
+    4. Trả lời trực tiếp không dùng tool
+    5. Khả năng từ chối ngoài phạm vi (Slide 45-46).
+*   **Key Takeaways:** Prompt là giao diện với model, system prompt mang lại tính nhất quán, Tool schema quyết định hành vi dùng tool, Parallel calling nhanh nhưng cẩn thận luồng dữ liệu, và Prompt safety là bắt buộc trong sản phẩm thực tế (Slide 47-48).
