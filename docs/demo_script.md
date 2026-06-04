@@ -1,91 +1,103 @@
 # Demo Script — AI IN ACTION Copilot
 
-**Thời gian:** 3–5 phút  
-**Người thuyết trình:** Phạm Hoàng Anh Kiệt (Thành viên 5)  
-**Backup:** Screenshot từ `evidence_screenshot/` nếu demo lỗi
-
 ---
 
-## Mở đầu (30 giây)
+## Mở đầu
 
 > "Nhóm mình là C401-Vinflow, làm Track A — Learning OS.
 >
-> Pain mình tự dùng thật: khi làm hackathon Day 5, mình cần tra lại 'Evidence Pack gồm những phần nào?' — phải mở file PDF 74 trang của Day 4, cuộn tìm thủ công mất 3–5 phút.
+> Pain mình tự dùng thật: khi làm hackathon Day 5, cần tra lại 'Evidence Pack gồm những phần nào?' — phải mở PDF 74 trang của Day 4, cuộn tìm thủ công mất 3–5 phút. Không có semantic search, Ctrl+F không đủ vì không nhớ keyword chính xác.
 >
 > Sản phẩm là **AI IN ACTION Copilot** — RAG chatbot tra cứu nội dung giáo trình 6 ngày đầu, trả về Answer + Source + Next Action."
 
 ---
 
-## Demo 1 — Happy path (1 phút)
+## Demo 1 — Happy path
 
-**Nhập câu hỏi vào chat box:**
+**Câu hỏi nhập vào:**
 
 ```
 Day 5 cần nộp gì?
 ```
 
-**Chỉ vào output và giải thích:**
+**Chỉ vào output:**
 - **Answer:** checklist cụ thể — Evidence Pack và Thin SPEC Draft
-- **Source:** "Day 5 · Mini-hackathon instruction" — user có thể tự verify
-- **Next Action:** bước tiếp theo — viết Evidence Pack, viết Thin SPEC, chuẩn bị repo
+- **Source:** "Day 5 · Mini-hackathon instruction" — user tự verify được
+- **Next Action:** viết Evidence Pack, viết Thin SPEC, chuẩn bị repo demo
 
 > "Output không chỉ là câu trả lời — còn có nguồn để kiểm tra và next action để biết làm gì tiếp."
 
----
-
-## Demo 2 — Happy path thứ 2 (45 giây)
-
-**Nhập câu hỏi:**
+**Câu hỏi thứ 2:**
 
 ```
 Evidence Pack gồm những phần nào?
 ```
 
-**Chỉ vào:**
-- Answer có đủ 6 phần của Evidence Pack
-- Source trỏ đúng tài liệu Day 5
-- Next Action gợi ý học viên điền vào template
+Chỉ vào source trỏ đúng tài liệu Day 5 và next action gợi ý học viên điền vào template.
 
 ---
 
-## Demo 3 — Failure path (45 giây)
+## Demo 2 — Low-confidence path
 
-**Nhập câu hỏi:**
+**Câu hỏi nhập vào (mơ hồ):**
+
+```
+Tôi cần làm gì cho project?
+```
+
+**Chỉ vào output:**
+- Copilot **không tự generate** câu trả lời chung chung
+- Hiển thị 2–3 chunk liên quan nhất kèm tên section để user tự chọn
+- Hoặc hỏi lại: "Bạn đang làm lab Day mấy?" để thu hẹp scope
+
+> "Câu mơ hồ có thể khớp với nhiều Day khác nhau — thay vì đoán sai, Copilot để user chọn đúng context."
+
+---
+
+## Demo 3 — Failure path
+
+**Câu hỏi nhập vào (ngoài phạm vi):**
 
 ```
 Tôi nên mua laptop gaming nào?
 ```
 
-**Chỉ vào:**
-- Copilot **không bịa** — không hallucinate
-- Fallback rõ ràng: "Mình chưa tìm thấy thông tin này trong tài liệu 6 ngày đầu."
-- Gợi ý user hỏi lại đúng phạm vi
+**Chỉ vào output — fallback:**
 
-> "Đây là điểm quan trọng nhất: AI học tập mà hallucinate sẽ khiến học viên làm sai assignment. Copilot chọn fallback thay vì trả lời bừa."
+```
+Mình chưa tìm thấy thông tin này trong tài liệu 6 ngày đầu.
+Bạn có thể hỏi về slide, lab, assignment hoặc framework của chương trình AI Thực Chiến.
+```
+
+> "Đây là điểm quan trọng nhất: AI học tập mà hallucinate sẽ khiến học viên làm sai assignment. Copilot không generate khi similarity score < 0.40 — chọn fallback thay vì bịa."
 
 ---
 
-## Kết luận (30 giây)
+## Demo 4 — Correction path
 
-> "Toàn bộ flow: **Question → RAG Search → MIMO API → Answer + Source + Next Action**
+**Kịch bản:** user thấy answer chưa đúng và sửa lại câu hỏi.
+
+```
+Không phải, tôi hỏi về Thin SPEC Draft chứ không phải Evidence Pack.
+```
+
+**Chỉ vào output:**
+- Copilot search lại theo context mới
+- Trả lời đúng về Thin SPEC Draft với source và next action phù hợp
+
+> "Copilot không bị stuck với câu hỏi cũ — nhận correction và search lại ngay."
+
+---
+
+## Kết luận
+
+> "Toàn bộ flow: **Question → RAG Search (ChromaDB) → MIMO API → Answer + Source + Next Action**
 >
-> Build slice cam kết trong Thin SPEC đã chạy được end-to-end.
+> Build slice cam kết trong Thin SPEC đã chạy end-to-end với đủ 4 paths.
 >
-> Sản phẩm dùng **Augmentation**, không phải Automation — AI gợi ý, học viên tự verify và quyết định dùng thông tin nào.
+> Sản phẩm dùng **Augmentation** — AI gợi ý, học viên tự verify và quyết định.
 >
 > Cảm ơn."
-
----
-
-## Backup nếu demo lỗi
-
-Nếu app không chạy được, dùng screenshot trong `02-group-spec/evidence_screenshot/` để minh hoạ pain, rồi walk through code trong `codebase/src/rag_chain.py` và `codebase/app.py`.
-
-| Slide backup | Nội dung |
-|---|---|
-| `day5_slide29_4paths.png` | 4 paths — happy/low-confidence/failure/correction |
-| `day4_slide14_RTCF.png` | RTCF framework — ví dụ pain self-use |
-| `day5_slide40_thin_spec.png` | Thin SPEC — bằng chứng output khớp spec |
 
 ---
 
@@ -93,7 +105,8 @@ Nếu app không chạy được, dùng screenshot trong `02-group-spec/evidence
 
 | Câu hỏi | Trả lời |
 |---|---|
-| "Tại sao dùng RAG mà không fine-tune?" | RAG nhanh hơn, không cần GPU, data có thể cập nhật mà không train lại |
-| "ChromaDB có scale được không?" | Đủ cho 6 ngày × ~50 slide — scope cam kết trong spec |
-| "Tại sao chọn MIMO API?" | Đây là API được khoá học hướng dẫn; có thể swap sang Claude/OpenAI bằng cách đổi 1 file config |
+| "Tại sao dùng RAG mà không fine-tune?" | RAG nhanh hơn, không cần GPU, data cập nhật được mà không train lại |
+| "ChromaDB có scale được không?" | Đủ cho 6 ngày × ~50 slide — đúng scope cam kết trong spec |
+| "Tại sao chọn MIMO API?" | API được khoá học hướng dẫn; có thể swap bằng cách đổi 1 file config |
 | "User verify source bằng cách nào?" | Source hiển thị tên file + Day — user mở slide gốc kiểm tra |
+| "Low-confidence xử lý thế nào?" | Similarity 0.40–0.74: hiển thị 2–3 chunk kèm section để user tự chọn, không tự generate |
