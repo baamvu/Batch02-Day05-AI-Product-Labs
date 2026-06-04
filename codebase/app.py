@@ -139,10 +139,10 @@ for path in [src_path, project_root]:
     if path not in sys.path: sys.path.insert(0, path)
 
 try:
-    from src.copilot import ask_copilot
+    from src.rag_chain import ask_copilot
     import_ok = True
 except ImportError as e:
-    st.error(f"Không import được src.copilot. Chi tiết: {e}")
+    st.error(f"Không import được src.rag_chain. Chi tiết: {e}")
     import_ok = False
 
 # ─── HÀM BÓC TÁCH TỪ KHÓA THÔNG MINH ─────────────────────────────────────────
@@ -257,7 +257,7 @@ for i, msg in enumerate(current_messages):
 
 # ─── XỬ LÝ ĐẦU VÀO CỦA USER ──────────────────────────────────────────────────
 if not import_ok:
-    st.warning("⚠️ Kiểm tra file src/copilot.py và dependencies.")
+    st.warning("⚠️ Kiểm tra file src/rag_chain.py và dependencies.")
 else:
     user_input = st.chat_input("Nhập câu hỏi của bạn tại đây...")
     

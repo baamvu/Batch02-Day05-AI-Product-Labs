@@ -9,7 +9,7 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-from src.copilot import ask_copilot
+from src.rag_chain import ask_copilot
 
 GROUND_TRUTH_COLUMN = "Câu trả lời mong đợi (Ground Truth)"
 LOG_COLUMNS = [
