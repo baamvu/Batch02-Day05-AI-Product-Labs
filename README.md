@@ -6,11 +6,11 @@
 
 | Tên | MSSV | Vai trò |
 |-----|------|---------|
-| Vũ Quốc Bảo | 2A202600541 | Data owner — chuẩn bị data text, chunking, embedding, vector DB |
+| Vũ Quốc Bảo | 2A202600541 | Repo Owner / Data owner — chuẩn bị data text, chunking, embedding, vector DB |
 | Vũ Văn Huy | 2A202600750 | Backend RAG + API — RAG chain, prompt rule, MIMO API |
 | Nguyễn Trung Kiên | 2A202600969 | Prototype owner — Streamlit UI, chat box, hiển thị output |
 | Lê Đình Sỹ | 2A202600770 | QA/Test — test 4 paths: happy, low-confidence, failure, correction |
-| Phạm Hoàng Anh Kiệt | 2A202600797 | Demo script / Repo owner — README, demo script, product decision |
+| Phạm Hoàng Anh Kiệt | 2A202600797 | Demo script / README, demo script, product decision |
 
 ## Sản phẩm: AI IN ACTION Copilot
 
